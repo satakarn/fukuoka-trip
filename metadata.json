@@ -1,0 +1,5 @@
+{
+  "name": "Fukuoka Trip Planner",
+  "description": "A comprehensive itinerary planner for a Fukuoka trip, visualizing data from a master plan CSV with filtering capabilities.",
+  "requestFramePermissions": []
+}
