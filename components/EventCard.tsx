@@ -13,36 +13,35 @@ interface EventCardProps {
 
 export const EventCard: React.FC<EventCardProps> = ({ event, isActive, onSelect, onShowMap, onOpenLinks }) => {
   const typeColor = TYPE_COLORS[event.type] || TYPE_COLORS['Unknown'];
-  
+
   // Parse Links
   const allLinks = event.link.split(',').map(l => l.trim()).filter(l => l.length > 0);
-  
-  const mapLinks = allLinks.filter(l => 
-    l.includes('google.com/maps') || 
-    l.includes('maps.app.goo.gl') || 
+
+  const mapLinks = allLinks.filter(l =>
+    l.includes('google.com/maps') ||
     l.includes('goo.gl/maps')
   );
-  
+
   const otherLinks = allLinks.filter(l => !mapLinks.includes(l));
 
   const hasMap = mapLinks.length > 0;
   const hasOther = otherLinks.length > 0;
 
   return (
-    <div 
-        onClick={() => onSelect && onSelect(event)}
-        className={`
+    <div
+      onClick={() => onSelect && onSelect(event)}
+      className={`
             relative flex flex-col gap-3 p-5 rounded-2xl transition-all duration-300 cursor-pointer
-            ${isActive 
-                ? 'bg-white shadow-lg ring-2 ring-indigo-400/50 scale-[1.02] z-10' 
-                : 'bg-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:shadow-lg hover:-translate-y-1'
-            }
+            ${isActive
+          ? 'bg-white shadow-lg ring-2 ring-indigo-400/50 scale-[1.02] z-10'
+          : 'bg-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:shadow-lg hover:-translate-y-1'
+        }
         `}
     >
       <div className={`absolute top-4 right-4 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${typeColor} bg-opacity-50`}>
         {event.type || 'General'}
       </div>
-      
+
       <div className="mt-1">
         <h3 className={`text-lg font-bold pr-20 leading-snug ${isActive ? 'text-indigo-900' : 'text-slate-800'}`}>
           {event.name}
@@ -75,58 +74,58 @@ export const EventCard: React.FC<EventCardProps> = ({ event, isActive, onSelect,
       {/* Action Buttons Area */}
       {(hasMap || hasOther) && (
         <div className="mt-auto pt-2 flex gap-2">
-           
-           {/* Case A: Has Map Link */}
-           {hasMap && (
-             <>
-               <button
-                 onClick={(e) => {
-                     e.stopPropagation();
-                     if (onShowMap) onShowMap(event);
-                 }}
-                 className="flex-1 inline-flex items-center justify-center py-2 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors"
-               >
-                  <MapPin className="w-4 h-4 mr-2" />
-                  Show on Map
-               </button>
-               
-               {/* Secondary Button for Other Links when Map exists */}
-               {hasOther && (
-                 <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        if (otherLinks.length === 1) {
-                            window.open(otherLinks[0], '_blank');
-                        } else if (onOpenLinks) {
-                            onOpenLinks(otherLinks);
-                        }
-                    }}
-                    className="inline-flex items-center justify-center w-10 h-10 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors"
-                    title="Open Other Links"
-                 >
-                    <ExternalLink className="w-4 h-4" />
-                 </button>
-               )}
-             </>
-           )}
 
-           {/* Case B: No Map Link, but has Other Links */}
-           {!hasMap && hasOther && (
+          {/* Case A: Has Map Link */}
+          {hasMap && (
+            <>
               <button
                 onClick={(e) => {
+                  e.stopPropagation();
+                  if (onShowMap) onShowMap(event);
+                }}
+                className="flex-1 inline-flex items-center justify-center py-2 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors"
+              >
+                <MapPin className="w-4 h-4 mr-2" />
+                Show on Map
+              </button>
+
+              {/* Secondary Button for Other Links when Map exists */}
+              {hasOther && (
+                <button
+                  onClick={(e) => {
                     e.stopPropagation();
                     if (otherLinks.length === 1) {
-                        window.open(otherLinks[0], '_blank');
+                      window.open(otherLinks[0], '_blank');
                     } else if (onOpenLinks) {
-                        onOpenLinks(otherLinks);
+                      onOpenLinks(otherLinks);
                     }
-                }}
-                className="flex-1 inline-flex items-center justify-center py-2 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold rounded-xl transition-colors"
-              >
-                 <Globe className="w-4 h-4 mr-2" />
-                 Open Link
-              </button>
-           )}
+                  }}
+                  className="inline-flex items-center justify-center w-10 h-10 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors"
+                  title="Open Other Links"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </button>
+              )}
+            </>
+          )}
+
+          {/* Case B: No Map Link, but has Other Links */}
+          {!hasMap && hasOther && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (otherLinks.length === 1) {
+                  window.open(otherLinks[0], '_blank');
+                } else if (onOpenLinks) {
+                  onOpenLinks(otherLinks);
+                }
+              }}
+              className="flex-1 inline-flex items-center justify-center py-2 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold rounded-xl transition-colors"
+            >
+              <Globe className="w-4 h-4 mr-2" />
+              Open Link
+            </button>
+          )}
 
         </div>
       )}
